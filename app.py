@@ -19,7 +19,7 @@ def ping_api_post():
     count = data.get("count")
     
     if not hosts or count is None:
-        return jsonify({"error": "Missing 'hosts' or 'count' in request body"}), 400
+        return jsonify({"error": "Misssing 'hosts' or 'count' in request body"}), 400
 
     try:
         count = int(count)
