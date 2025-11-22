@@ -33,10 +33,10 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag network-test:latest ghcr.io/${{ secrets.DOCKER_USERNAME | lower }}/network-test:latest
-          docker tag network-test:latest ghcr.io/${{ secrets.DOCKER_USERNAME | lower }}/network-test:v1
+          docker tag network-test:latest ghcr.io/${{ secrets.DOCKER_USERNAME }}/network-test:latest
+          docker tag network-test:latest ghcr.io/${{ secrets.DOCKER_USERNAME}}/network-test:v1
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ secrets.DOCKER_USERNAME | lower }}/network-test:latest
-          docker push ghcr.io/${{ secrets.DOCKER_USERNAME | lower }}/network-test:v1
+          docker push ghcr.io/${{ secrets.DOCKER_USERNAME}}/network-test:latest
+          docker push ghcr.io/${{ secrets.DOCKER_USERNAME}}/network-test:v1
