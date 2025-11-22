@@ -33,10 +33,10 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag network-monitor-api:latest ghcr.io/${{ github.repository_owner }}/network-monitor-api:latest
-          docker tag network-monitor-api:latest ghcr.io/${{ github.repository_owner }}/network-monitor-api:v1
+          docker tag network-test:latest ghcr.io/${{ github.repository_owner }}/network-test:latest
+          docker tag network-test:latest ghcr.io/${{ github.repository_owner }}/network-test:v1
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/network-monitor-api:latest
-          docker push ghcr.io/${{ github.repository_owner }}/network-monitor-api:v1
+          docker push ghcr.io/${{ github.repository_owner }}/network-test:latest
+          docker push ghcr.io/${{ github.repository_owner }}/network-test:v1
