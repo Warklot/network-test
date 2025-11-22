@@ -26,7 +26,7 @@ def ping(host,count):
         host_info["Online"] = False
         host_info["avg_part"] = None
         host_info["min_part"] = None 
-        host_info["max_parts"] = None  
+        host_info["max_part"] = None  
         host_info["timestamp"] = datetime.datetime.now().isoformat()
         return host_info
         
