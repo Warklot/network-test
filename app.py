@@ -1,27 +1,39 @@
 from flask import Flask, request, jsonify
-from ping import ping  
+from ping import ping_host
+import logging
+from flask import request
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
-@app.route("/ping", methods=["GET"])
-def ping_api():
-    hosts = request.args.get("hosts", "8.8.8.8").split(",") 
-    results = []
-    for host in hosts:
-        results.append(ping(host.strip(), 4))
-    return jsonify(results)
+@app.before_request
+def log_request_info():
+    logging.info(f"{request.method} {request.path} from {request.remote_addr}")
+    logging.info(f"Body: {request.get_json()}")
 
 @app.route("/pingpost", methods=["POST"])
 def ping_api_post():
     data = request.get_json()
     hosts = data.get("hosts", [])
-    count = data.get("count", 4)
+    count = data.get("count")
     
+    if not hosts or count is None:
+        return jsonify({"error": "Missing 'hosts' or 'count' in request body"}), 400
+
+    try:
+        count = int(count)
+        if count <= 0:
+            raise ValueError
+    except ValueError:
+        return jsonify({"error": "'count' must be a positive integer"}), 400
+
     results = []
     for host in hosts:
-        results.append(ping(host.strip(), count))
+        results.append(ping_host(host.strip(), count))
         
     return jsonify(results)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
