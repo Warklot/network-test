@@ -13,9 +13,9 @@ def ping_host(host, count):
         latency = None
         for attempt in range(retries):
             latency = ping(host, timeout=2)
-            if latency is not None:
+            if latency:
                 break  # success
-        if latency is not None:
+        if latency:
             latencies_ms.append(int(latency * 1000))
     if latencies_ms:
         host_info["Online"] = True

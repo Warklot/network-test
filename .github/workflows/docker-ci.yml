@@ -25,6 +25,9 @@ jobs:
       - name: Run basic syntax test
         run: python -m py_compile *.py 
 
+      - name: Testing Ping functionality
+        run: python -m pytest tests/test_ping.py
+
       - name: Build Docker image
         run: docker build -t network-test:latest .
 
