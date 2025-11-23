@@ -11,7 +11,7 @@ from unittest.mock import patch
 ])
 
 def test_ping_hosts(host, expected_ping):
-    with patch("ping3.ping", return_value=expected_ping):
+    with patch("ping.ping", return_value=expected_ping):
         result = ping_host(host, 1)
         if expected_ping is None:
             assert result["Online"] is False
@@ -26,7 +26,7 @@ def test_ping_hosts(host, expected_ping):
             assert result["min_ms"] <= result["avg_ms"] <= result["max_ms"]
 
 def test_ping_google_returns_valid_latency():
-    with patch("ping3.ping", return_value=0.05):
+    with patch("ping.ping", return_value=0.05):
         result = ping_host("8.8.8.8", 2)
         assert result["Online"] is True
         assert result["avg_ms"] > 0
@@ -35,7 +35,7 @@ def test_ping_google_returns_valid_latency():
         assert result["min_ms"] <= result["avg_ms"] <= result["max_ms"]
 
 def test_ping_offline_has_none_values():
-    with patch("ping3.ping", return_value=None):
+    with patch("ping.ping", return_value=None):
         result = ping_host("10.255.255.1", 1)
         assert result["Online"] is False
         assert result["avg_ms"] is None
