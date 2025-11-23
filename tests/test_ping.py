@@ -1,5 +1,5 @@
 import pytest
-from telia.ping import ping_host
+from ping import ping_host
 
 @pytest.mark.parametrize("host,expected", [
     ("8.8.8.8", True),
