@@ -11,7 +11,7 @@ def ping_host(host, count):
     for _ in range(count):
         retries = 2
         latency = None
-        for attempt in range(retries + 1):
+        for attempt in range(retries):
             latency = ping(host, timeout=2)
             if latency is not None:
                 break  # success

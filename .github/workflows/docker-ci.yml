@@ -1,4 +1,4 @@
-name: Build, Test, and Push Docker Image
+name: Setup Python, Build Image, Push Image.
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run basic syntax test
-        run: python -m py_compile *.py
+        run: python -m py_compile *.py 
 
       - name: Build Docker image
         run: docker build -t network-test:latest .
