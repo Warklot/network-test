@@ -1,31 +1,43 @@
 import pytest
 from ping import ping_host
+from unittest.mock import patch
 
-@pytest.mark.parametrize("host,expected", [
-    ("8.8.8.8", True),
-    ("1.1.1.1", True),
-    ("999.999.999.999", False),
-    ("invalid-host", False),
-    ("this-host-definitely-does-not-exist-12345.com", False),
+@pytest.mark.parametrize("host,expected_ping", [
+    ("8.8.8.8", 0.05),
+    ("1.1.1.1", 0.1),
+    ("999.999.999.999", None),
+    ("invalid-host", None),
+    ("this-host-definitely-does-not-exist-12345.com", None),
 ])
 
-def test_ping_hosts(host, expected):
-    result = ping_host(host, 1)
-    assert result['Online'] == expected
+def test_ping_hosts(host, expected_ping):
+    with patch("ping3.ping", return_value=expected_ping):
+        result = ping_host(host, 1)
+        if expected_ping is None:
+            assert result["Online"] is False
+            assert result["avg_ms"] is None
+            assert result["min_ms"] is None
+            assert result["max_ms"] is None
+        else:
+            assert result["Online"] is True
+            assert result["avg_ms"] > 0
+            assert result["min_ms"] > 0
+            assert result["max_ms"] > 0
+            assert result["min_ms"] <= result["avg_ms"] <= result["max_ms"]
 
 def test_ping_google_returns_valid_latency():
-    result = ping_host("8.8.8.8", 2)
-    
-    assert result['Online'] == True
-    assert result['avg_ms'] > 0
-    assert result['min_ms'] > 0
-    assert result['max_ms'] > 0
-    assert result['min_ms'] <= result['avg_ms'] <= result['max_ms']
+    with patch("ping3.ping", return_value=0.05):
+        result = ping_host("8.8.8.8", 2)
+        assert result["Online"] is True
+        assert result["avg_ms"] > 0
+        assert result["min_ms"] > 0
+        assert result["max_ms"] > 0
+        assert result["min_ms"] <= result["avg_ms"] <= result["max_ms"]
 
 def test_ping_offline_has_none_values():
-    result = ping_host("999.999.999.999", 1)
-    
-    assert result['Online'] == False
-    assert result['avg_ms'] is None
-    assert result['min_ms'] is None
-    assert result['max_ms'] is None
+    with patch("ping3.ping", return_value=None):
+        result = ping_host("10.255.255.1", 1)
+        assert result["Online"] is False
+        assert result["avg_ms"] is None
+        assert result["min_ms"] is None
+        assert result["max_ms"] is None
