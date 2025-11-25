@@ -6,7 +6,7 @@ from flask import request
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
-
+ALLOWED_KEYS = {"hosts", "count"}
 @app.before_request
 def log_request_info():
     logging.info(f"{request.method} {request.path} from {request.remote_addr}")
@@ -15,6 +15,9 @@ def log_request_info():
 @app.route("/pingpost", methods=["POST"])
 def ping_api_post():
     data = request.get_json()
+    extra_keys = set(data.keys()) - ALLOWED_KEYS
+    if extra_keys:
+        return jsonify({"error": f"Invalid keys in request body: {', '.join(extra_keys)}"}), 400
     hosts = data.get("hosts", [])
     count = data.get("count")
     
