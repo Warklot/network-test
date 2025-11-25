@@ -31,7 +31,7 @@ def ping_api_post():
     results = []
     for host in hosts:
         pinger = HostPinger(host.strip(), count)
-        pinger.ping
+        pinger.ping()
         results.append(pinger.get_info())
         
     return jsonify(results)
