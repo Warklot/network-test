@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 def test_ping_hosts(host, expected_ping):
     with patch("ping.ping", return_value=expected_ping):
-        result = HostPinger.ping(host, 1)
+        result = HostPinger(host, 1).ping
         if expected_ping is None:
             assert result["Online"] is False
             assert result["avg_ms"] is None
@@ -27,7 +27,7 @@ def test_ping_hosts(host, expected_ping):
 
 def test_ping_google_returns_valid_latency():
     with patch("ping.ping", return_value=0.05):
-        result = HostPinger.ping("8.8.8.8", 2)
+        result = HostPinger("8.8.8.8", 2).ping
         assert result["Online"] is True
         assert result["avg_ms"] > 0
         assert result["min_ms"] > 0
@@ -36,7 +36,7 @@ def test_ping_google_returns_valid_latency():
 
 def test_ping_offline_has_none_values():
     with patch("ping.ping", return_value=None):
-        result = HostPinger.ping("10.255.255.1", 1)
+        result = HostPinger("10.255.255.1", 1).ping
         assert result["Online"] is False
         assert result["avg_ms"] is None
         assert result["min_ms"] is None
