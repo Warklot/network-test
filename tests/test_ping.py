@@ -29,7 +29,7 @@ def test_ping_hosts(host, expected_ping):
 
 def test_ping_google_returns_valid_latency():
     with patch("ping.ping", return_value=0.05):
-        pinger = HostPinger("8.8.8.8", 2).ping
+        pinger = HostPinger("8.8.8.8", 2)
         pinger.ping()
         result = pinger.get_info()
         assert result["Online"] is True
@@ -40,7 +40,7 @@ def test_ping_google_returns_valid_latency():
 
 def test_ping_offline_has_none_values():
     with patch("ping.ping", return_value=None):
-        pinger = HostPinger("10.255.255.1", 1).ping
+        pinger = HostPinger("10.255.255.1", 1)
         pinger.ping()
         result = pinger.get_info()
         assert result["Online"] is False
