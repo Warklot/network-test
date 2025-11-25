@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from ping import ping_host
+from ping import HostPinger
 import logging
 from flask import request
 
@@ -30,7 +30,9 @@ def ping_api_post():
 
     results = []
     for host in hosts:
-        results.append(ping_host(host.strip(), count))
+        pinger = HostPinger(host.strip(), count)
+        pinger.ping
+        results.append(pinger.get_info())
         
     return jsonify(results)
 
