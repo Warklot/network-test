@@ -20,11 +20,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+
+        #-----TESTS-----------------------------------------
       - name: Run basic syntax test
         run: python -m py_compile *.py 
 
       - name: Run unit tests
         run: python -m pytest tests/test_ping.py -vv -s
+        #---------------------------------------------------
+
 
       - name: Set up QEMU (for ARM emulation)
         uses: docker/setup-qemu-action@v2
