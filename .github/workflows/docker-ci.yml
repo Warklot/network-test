@@ -12,9 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # --------------------------
-      # CI: Test your code on runner
-      # --------------------------
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -29,9 +26,6 @@ jobs:
       - name: Run unit tests
         run: python -m pytest tests/test_ping.py -vv -s
 
-      # --------------------------
-      # Build Docker image for ARM64
-      # --------------------------
       - name: Set up QEMU (for ARM emulation)
         uses: docker/setup-qemu-action@v2
         with:
@@ -50,9 +44,6 @@ jobs:
             -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/network-test:v1 \
             --push .
 
-      # --------------------------
-      # Deploy to Raspberry Pi via Ansible
-      # --------------------------
       - name: Set up SSH for Ansible
         uses: webfactory/ssh-agent@v0.9.1
         with:
