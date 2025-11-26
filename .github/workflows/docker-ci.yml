@@ -35,7 +35,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H 78.58.109.113 >> ~/.ssh/known_hosts
-          
+
       #-----SETUP TO FOR DOCKER----------------------------------------------
       - name: Set up QEMU (for ARM emulation)
         uses: docker/setup-qemu-action@v2
@@ -58,6 +58,12 @@ jobs:
             --platform linux/arm64 \
             -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/network-test:v1 \
             --push .
+
+      # EXPORT for usage later in ansible
+      - name: Export Docker credentials for Ansible
+        run: |
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
 
       #-----LOGIN TO RASPBERRY PI----------------------------------------------
       - name: Set up SSH for Ansible

@@ -14,6 +14,9 @@
         src: files/docker-compose.yml
         dest: /opt/network-test/docker-compose.yml
 
+    - name: Log in to GHCR
+      shell: echo "{{ lookup('env','DOCKER_PASSWORD') }}" | docker login ghcr.io -u "{{ lookup('env','DOCKER_USERNAME') }}" --password-stdin
+
     - name: Pull image from GHCR
       shell: docker pull ghcr.io/{{ lookup('env','DOCKER_USERNAME') }}/network-test:v1
 
