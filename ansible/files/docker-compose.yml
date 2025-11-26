@@ -6,6 +6,6 @@ services:
     container_name: network-test
     restart: unless-stopped
     ports:
-      - "5001:5000"
+      - "5001:5001"
     security_opt:
       - seccomp:unconfined
