@@ -35,7 +35,7 @@ jobs:
 
 
       - name: Set up SSH for Ansible
-        uses: webfactory/ssh-agent@v0.8.2
+        uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.RASPBERRY_SSH_KEY }}
 
