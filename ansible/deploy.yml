@@ -1,0 +1,23 @@
+---
+- name: Deploy app on Raspberry using Docker
+  hosts: raspberry
+  become: true
+
+  tasks:
+    - name: Ensure deployment directory exists
+      file:
+        path: /opt/network-test
+        state: directory
+
+    - name: Copy docker-compose file
+      copy:
+        src: files/docker-compose.yml
+        dest: /opt/network-test/docker-compose.yml
+
+    - name: Pull image from GHCR
+      shell: docker pull ghcr.io/{{ lookup('env','DOCKER_USERNAME') }}/network-test:v1
+
+    - name: Start container
+      shell: |
+        cd /opt/network-test
+        docker compose up -d

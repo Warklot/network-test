@@ -3,8 +3,6 @@ name: Setup Python, Build Image, Push Image.
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -28,18 +26,24 @@ jobs:
       - name: Testing Ping functionality
         run: python -m pytest tests/test_ping.py -vv -s
 
-      - name: Build Docker image
-        run: docker build -t network-test:latest .
-
       - name: Log in to GHCR
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Tag Docker image
+      - name: Build Docker image (ARM64 for Pi)
         run: |
-          docker tag network-test:latest ghcr.io/${{ secrets.DOCKER_USERNAME }}/network-test:latest
-          docker tag network-test:latest ghcr.io/${{ secrets.DOCKER_USERNAME}}/network-test:v1
+          docker build --platform linux/arm/v8 -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/network-test:v1 .
 
-      - name: Push Docker image
+
+      - name: Set up SSH for Ansible
+        uses: webfactory/ssh-agent@v0.8.2
+        with:
+          ssh-private-key: ${{ secrets.RASPBERRY_SSH_KEY }}
+
+          
+      - name: Install Ansible
         run: |
-          docker push ghcr.io/${{ secrets.DOCKER_USERNAME}}/network-test:latest
-          docker push ghcr.io/${{ secrets.DOCKER_USERNAME}}/network-test:v1
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Deploy via Ansible
+        run: ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
