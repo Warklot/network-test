@@ -53,7 +53,7 @@ jobs:
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
 
-      # Export Docker credentials as environment variables for Ansible
+      # BUILD AND PUSH IMAGE TO GHCR
       - name: Build and push multi-arch Docker image
         run: |
           docker buildx build \
@@ -66,7 +66,6 @@ jobs:
       - name: Export Docker credentials for Ansible
         run: |
           echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
-          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
 
       # Set up SSH agent with Raspberry Pi private key
       - name: Set up SSH for Ansible

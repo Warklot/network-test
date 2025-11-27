@@ -16,10 +16,10 @@ class HostPinger:
     def ping(self):
         self.timestamp = datetime.datetime.now().isoformat()
         self.latencies_ms = []
-        for _ in range(self.count):
+        for _ in range(self.count): 
             retries = 2
             latency = None
-            for _ in range (retries):
+            for _ in range (retries): 
                 latency = ping(self.host, timeout=2)
                 if latency:
                     break

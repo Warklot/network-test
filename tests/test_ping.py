@@ -38,6 +38,7 @@ def test_ping_google_returns_valid_latency():
         assert result["max_ms"] > 0
         assert result["min_ms"] <= result["avg_ms"] <= result["max_ms"]
 
+
 def test_ping_offline_has_none_values():
     with patch("ping.ping", return_value=None):
         pinger = HostPinger("10.255.255.1", 1)
